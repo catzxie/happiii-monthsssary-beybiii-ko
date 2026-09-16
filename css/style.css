@@ -1,0 +1,727 @@
+* { box-sizing: border-box; }
+
+html, body { margin: 0; width: 100%; min-height: 100%; }
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at 72% 42%, rgba(255, 58, 151, .20), transparent 30%),
+    radial-gradient(circle at 18% 72%, rgba(255, 125, 190, .13), transparent 28%),
+    linear-gradient(135deg, #05030b 0%, #160616 45%, #05030b 100%);
+  position: relative;
+}
+
+#ambientBackground {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(255, 80, 160, .09), transparent 38%),
+    radial-gradient(circle at 82% 18%, rgba(255, 180, 220, .08), transparent 22%);
+}
+
+.ambient-heart,
+.ambient-spark,
+.ambient-petal,
+.ambient-orb {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.ambient-heart {
+  width: 15px;
+  height: 15px;
+  background: #ff5da8;
+  transform: rotate(45deg);
+  border-radius: 4px 0 4px 0;
+  filter: drop-shadow(0 0 12px rgba(255, 74, 155, .8));
+  animation: floatHeart linear infinite;
+}
+
+.ambient-heart::before,
+.ambient-heart::after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: inherit;
+  border-radius: 50%;
+}
+.ambient-heart::before { top: -7.5px; left: 0; }
+.ambient-heart::after { top: 0; left: -7.5px; }
+
+.ambient-spark {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffe8f3;
+  box-shadow: 0 0 15px 5px rgba(255, 130, 195, .65);
+  animation: twinkle ease-in-out infinite;
+}
+
+.ambient-petal {
+  width: 11px;
+  height: 18px;
+  border-radius: 100% 0 100% 0;
+  background: rgba(255, 137, 188, .75);
+  filter: blur(.1px) drop-shadow(0 0 7px rgba(255, 83, 158, .45));
+  animation: petalFall linear infinite;
+}
+
+.ambient-orb {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 113, 180, .16), rgba(255, 113, 180, 0));
+  filter: blur(5px);
+  animation: orbDrift ease-in-out infinite alternate;
+}
+
+@keyframes floatHeart {
+  0% { transform: translate3d(0, 18vh, 0) rotate(45deg) scale(.45); opacity: 0; }
+  15% { opacity: .65; }
+  55% { transform: translate3d(28px, -48vh, 0) rotate(210deg) scale(.9); opacity: .42; }
+  100% { transform: translate3d(-35px, -125vh, 0) rotate(405deg) scale(1.25); opacity: 0; }
+}
+
+@keyframes petalFall {
+  0% { transform: translate3d(0, -15vh, 0) rotate(0deg); opacity: 0; }
+  12% { opacity: .65; }
+  50% { transform: translate3d(70px, 50vh, 0) rotate(180deg); }
+  100% { transform: translate3d(-90px, 120vh, 0) rotate(430deg); opacity: 0; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: .08; transform: scale(.5); }
+  50% { opacity: .95; transform: scale(1.65); }
+}
+
+@keyframes orbDrift {
+  from { transform: translate(-30px, -20px) scale(.75); opacity: .25; }
+  to { transform: translate(55px, 35px) scale(1.3); opacity: .7; }
+}
+
+main {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  width: 100%;
+  display: block;
+  padding: 16px 20px;
+}
+
+.love-card {
+  position: relative;
+  width: 100%;
+  max-width: 1920px;
+  min-height: calc(100vh - 32px);
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+  border: 1px solid rgba(255, 181, 215, .42);
+  border-radius: clamp(24px, 2.6vw, 48px);
+  background:
+    radial-gradient(circle at 75% 60%, rgba(255, 52, 142, .13), transparent 32%),
+    linear-gradient(115deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .012)),
+    rgba(18, 3, 17, .76);
+  box-shadow: 0 35px 110px rgba(0, 0, 0, .68), inset 0 0 90px rgba(255, 66, 146, .07);
+  backdrop-filter: blur(8px);
+}
+
+.corner-glow {
+  position: absolute;
+  width: 58%;
+  height: 82%;
+  top: -22%;
+  left: -12%;
+  border-radius: 50%;
+  background: rgba(255, 53, 142, .25);
+  filter: blur(95px);
+  animation: glowPulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from { opacity: .55; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1.08); }
+}
+
+/* Large corner message panel — intentionally much larger for a cinematic/full-HD layout. */
+.corner-box {
+  position: absolute;
+  z-index: 8;
+  left: clamp(22px, 3.8vw, 76px);
+  top: clamp(22px, 4.2vh, 64px);
+  width: min(880px, 55%);
+  min-height: min(690px, 69%);
+  padding: clamp(34px, 4vw, 76px);
+  border-radius: clamp(28px, 3vw, 48px);
+  border: 1px solid rgba(255, 230, 241, .7);
+  background:
+    linear-gradient(145deg, rgba(255, 111, 176, .95), rgba(218, 33, 117, .84) 55%, rgba(102, 6, 53, .82));
+  box-shadow: 0 30px 100px rgba(255, 30, 128, .27), inset 0 1px 0 rgba(255, 255, 255, .32);
+  backdrop-filter: blur(15px);
+  overflow: hidden;
+  animation: panelFloat 6s ease-in-out infinite;
+}
+
+.corner-box::before {
+  content: "";
+  position: absolute;
+  inset: -35% -20%;
+  background: linear-gradient(120deg, transparent 35%, rgba(255,255,255,.15) 48%, transparent 61%);
+  transform: translateX(-55%) rotate(8deg);
+  animation: panelShine 7s ease-in-out infinite;
+}
+
+.corner-box::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -180px;
+  bottom: -180px;
+  border-radius: 50%;
+  background: rgba(255, 225, 238, .18);
+  filter: blur(16px);
+}
+
+@keyframes panelFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes panelShine {
+  0%, 65% { transform: translateX(-55%) rotate(8deg); opacity: 0; }
+  75% { opacity: .9; }
+  100% { transform: translateX(55%) rotate(8deg); opacity: 0; }
+}
+
+.box-dot {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255,255,255,.28);
+}
+.dot-pink { background: #ffecf5; }
+.dot-peach { background: #ffd3c2; }
+.dot-white { background: #fff; }
+
+.message { position: relative; z-index: 3; margin-top: clamp(34px, 4vh, 52px); }
+.say { opacity: 0; transform: translateY(20px) scale(.98); transition: opacity .9s ease, transform .9s ease; }
+.say.show { opacity: 1; transform: translateY(0) scale(1); }
+
+.intro { margin: 0 0 10px; font-size: clamp(20px, 1.55vw, 30px); font-style: italic; }
+.message h1 {
+  margin: 0 0 26px;
+  font-size: clamp(48px, 4.8vw, 88px);
+  line-height: .98;
+  color: #fff;
+  text-shadow: 0 5px 30px rgba(104, 0, 55, .44);
+}
+#typedText { min-height: 175px; margin: 0; max-width: 760px; font-size: clamp(20px, 1.6vw, 30px); line-height: 1.55; }
+.languages { margin: 22px 0 0; font-size: clamp(15px, 1.1vw, 21px); line-height: 1.8; }
+.signature { margin-top: 24px; font-size: clamp(20px, 1.35vw, 26px); font-style: italic; }
+
+#loveCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none; }
+
+.counter {
+  position: absolute;
+  z-index: 10;
+  left: clamp(26px, 3.8vw, 76px);
+  bottom: clamp(22px, 4vh, 48px);
+  font-size: clamp(13px, 1vw, 18px);
+  color: rgba(255, 238, 247, .82);
+}
+.counter strong { display: block; margin-top: 5px; font-size: clamp(20px, 1.6vw, 29px); color: #fff; }
+
+@media (max-width: 1100px) {
+  body { overflow-y: auto; }
+  main { padding: 14px; }
+  .love-card { width: 96vw; height: 820px; min-height: 820px; }
+  .corner-box { left: 4%; top: 4%; width: 68%; min-height: 520px; padding: 34px; }
+  .message h1 { font-size: clamp(40px, 7vw, 68px); }
+  #typedText { font-size: 18px; }
+}
+
+@media (max-width: 720px) {
+  .love-card { width: 96vw; height: 800px; min-height: 800px; border-radius: 28px; }
+  .corner-box { left: 5%; top: 5%; width: 90%; min-height: 500px; padding: 25px; }
+  .message { margin-top: 30px; }
+  .message h1 { font-size: clamp(36px, 10vw, 58px); margin-bottom: 18px; }
+  #typedText { min-height: 140px; font-size: 15px; }
+  .languages { font-size: 12px; }
+  .signature { font-size: 16px; }
+  .counter { bottom: 20px; }
+}
+
+
+/* Priority memory carousel: all 15 photos appear first. Navigation is hover-only; no autoplay. */
+.memory-carousel {
+  position: relative;
+  z-index: 50;
+  width: min(980px, 94%);
+  margin: clamp(18px, 3vw, 42px) auto clamp(56px, 7vw, 90px);
+  text-align: center;
+  filter: drop-shadow(0 24px 45px rgba(0, 0, 0, .38));
+}
+
+.memory-carousel > input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carousel-window {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 226, 240, .7);
+  border-radius: clamp(22px, 2.5vw, 32px);
+  background: rgba(35, 4, 28, .78);
+  box-shadow: inset 0 0 35px rgba(255, 99, 170, .12), 0 20px 60px rgba(0,0,0,.35);
+  aspect-ratio: 16 / 10;
+}
+
+.carousel-track {
+  display: flex;
+  width: 1500%;
+  height: 100%;
+  transition: transform .65s cubic-bezier(.22, .61, .36, 1);
+  will-change: transform;
+}
+
+.memory-slide {
+  position: relative;
+  width: 6.6666667%;
+  height: 100%;
+  margin: 0;
+  padding: 12px;
+  flex: 0 0 6.6666667%;
+  overflow: hidden;
+}
+
+.memory-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  transition: transform .55s cubic-bezier(.2,.7,.2,1), filter .55s ease, box-shadow .55s ease;
+  will-change: transform;
+}
+
+/* Image hover effect stays inside the frame and does not move the carousel layout. */
+.memory-slide:hover img {
+  transform: scale(1.045);
+  filter: brightness(1.08) saturate(1.1);
+  box-shadow: 0 12px 35px rgba(255, 64, 150, .32);
+}
+
+/* Arrows are invisible until the image itself is hovered. */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  width: 52px;
+  height: 52px;
+  margin-top: -26px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 50%;
+  background: rgba(18, 3, 17, .58);
+  color: #fff;
+  font: 700 38px/1 Arial, sans-serif;
+  text-shadow: 0 2px 12px rgba(0,0,0,.65);
+  box-shadow: 0 8px 25px rgba(0,0,0,.35), 0 0 20px rgba(255,80,160,.22);
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: none;
+  transform: scale(.82) translateY(0);
+  transition: opacity .25s ease, transform .25s ease, background .25s ease;
+  user-select: none;
+}
+
+.carousel-prev { left: 24px; }
+.carousel-next { right: 24px; }
+
+.memory-slide:hover .carousel-arrow,
+.carousel-arrow:hover,
+.carousel-arrow:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.carousel-arrow:hover,
+.carousel-arrow:focus-visible {
+  background: rgba(255, 75, 155, .82);
+  outline: none;
+}
+
+/* 15 radio positions — wrap-around navigation. */
+#memory-1:checked ~ .carousel-window .carousel-track { transform: translateX(0); }
+#memory-2:checked ~ .carousel-window .carousel-track { transform: translateX(-6.6666667%); }
+#memory-3:checked ~ .carousel-window .carousel-track { transform: translateX(-13.3333334%); }
+#memory-4:checked ~ .carousel-window .carousel-track { transform: translateX(-20%); }
+#memory-5:checked ~ .carousel-window .carousel-track { transform: translateX(-26.6666668%); }
+#memory-6:checked ~ .carousel-window .carousel-track { transform: translateX(-33.3333335%); }
+#memory-7:checked ~ .carousel-window .carousel-track { transform: translateX(-40%); }
+#memory-8:checked ~ .carousel-window .carousel-track { transform: translateX(-46.6666669%); }
+#memory-9:checked ~ .carousel-window .carousel-track { transform: translateX(-53.3333336%); }
+#memory-10:checked ~ .carousel-window .carousel-track { transform: translateX(-60%); }
+#memory-11:checked ~ .carousel-window .carousel-track { transform: translateX(-66.6666667%); }
+#memory-12:checked ~ .carousel-window .carousel-track { transform: translateX(-73.3333334%); }
+#memory-13:checked ~ .carousel-window .carousel-track { transform: translateX(-80%); }
+#memory-14:checked ~ .carousel-window .carousel-track { transform: translateX(-86.6666667%); }
+#memory-15:checked ~ .carousel-window .carousel-track { transform: translateX(-93.3333338%); }
+
+.carousel-caption {
+  margin: 13px 0 0;
+  color: rgba(255, 232, 244, .9);
+  font-size: clamp(13px, 1vw, 18px);
+  font-style: italic;
+}
+
+/* The carousel is the first visual priority; scrolling naturally reveals the message and animation. */
+.corner-box {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: min(880px, 88%);
+  min-height: 560px;
+  margin: 0 auto clamp(40px, 6vw, 80px);
+}
+
+#loveCanvas {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  width: min(1200px, 100%);
+  height: 900px;
+  margin: 0 auto;
+  display: block;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.counter {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  width: min(880px, 88%);
+  margin: 0 auto 50px;
+}
+
+@media (max-width: 1100px) {
+  main { padding: 14px; }
+  .love-card { width: 96vw; min-height: 0; height: auto; }
+  .memory-carousel { width: 94%; }
+  .corner-box { width: 90%; min-height: 520px; padding: 34px; }
+  .message h1 { font-size: clamp(40px, 7vw, 68px); }
+  #typedText { font-size: 18px; }
+  #loveCanvas { height: 760px; }
+}
+
+@media (max-width: 720px) {
+  .love-card { width: 96vw; min-height: 0; height: auto; border-radius: 28px; }
+  .memory-carousel { width: 94%; margin-bottom: 42px; }
+  .carousel-window { aspect-ratio: 5 / 4; }
+  .memory-slide { padding: 8px; }
+  .memory-slide img { border-radius: 15px; }
+  .carousel-arrow { width: 44px; height: 44px; margin-top: -22px; font-size: 32px; }
+  .carousel-prev { left: 16px; }
+  .carousel-next { right: 16px; }
+  .carousel-caption { margin-top: 9px; }
+  .corner-box { width: 90%; min-height: 500px; padding: 25px; }
+  .message { margin-top: 30px; }
+  .message h1 { font-size: clamp(36px, 10vw, 58px); margin-bottom: 18px; }
+  #typedText { min-height: 140px; font-size: 15px; }
+  .languages { font-size: 12px; }
+  .signature { font-size: 16px; }
+  #loveCanvas { height: 620px; }
+  .counter { width: 90%; margin-bottom: 28px; }
+}
+
+/* =========================================================
+   Love-story section below the carousel
+   The carousel stays first; scrolling reveals the message and tree.
+   The message panel scales from Full-HD desktops down to phones.
+   ========================================================= */
+.love-story-stage {
+  position: relative;
+  width: 100%;
+  min-height: clamp(820px, 52vw, 900px);
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.love-story-stage .corner-glow {
+  position: absolute;
+  width: 58%;
+  height: 82%;
+  top: -10%;
+  left: -12%;
+  z-index: 0;
+}
+
+/* Desktop: match the reference composition without letting the text box
+   become oversized or crowd the viewport edges. */
+.love-story-stage .corner-box {
+  position: absolute;
+  z-index: 8;
+  left: clamp(24px, 4vw, 76px);
+  top: clamp(24px, 4vw, 64px);
+  width: min(820px, 48%);
+  height: clamp(560px, 38vw, 710px);
+  min-height: 0;
+  margin: 0;
+  padding: clamp(30px, 3.4vw, 58px);
+}
+
+/* Keep the month counter clearly outside the message panel on desktop. */
+.love-story-stage .counter {
+  position: absolute;
+  z-index: 12;
+  left: clamp(28px, 4vw, 76px);
+  top: calc(clamp(560px, 38vw, 710px) + clamp(38px, 4vw, 64px));
+  bottom: auto;
+  width: auto;
+  margin: 0;
+  text-align: left;
+}
+
+.love-story-stage .message {
+  margin-top: clamp(28px, 3vw, 48px);
+}
+
+.love-story-stage .intro {
+  margin-bottom: clamp(8px, 1vw, 14px);
+}
+
+.love-story-stage .message h1 {
+  margin-bottom: clamp(18px, 1.8vw, 28px);
+  font-size: clamp(44px, 4.2vw, 78px);
+}
+
+.love-story-stage #typedText {
+  max-width: 700px;
+  min-height: clamp(125px, 11vw, 175px);
+  font-size: clamp(18px, 1.45vw, 28px);
+  line-height: 1.48;
+}
+
+.love-story-stage .languages {
+  margin-top: clamp(16px, 1.6vw, 24px);
+}
+
+.love-story-stage .signature {
+  margin-top: clamp(18px, 1.8vw, 26px);
+}
+
+.love-story-stage #loveCanvas {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: block;
+}
+
+
+
+/* Medium screens / tablets: use a wider panel and reserve a lower area
+   for the tree so nothing is squeezed horizontally. */
+@media (max-width: 1100px) {
+  .memory-carousel {
+    width: min(94%, 900px);
+    margin-top: 18px;
+    margin-bottom: clamp(42px, 6vw, 70px);
+  }
+
+  .love-story-stage {
+    min-height: 1180px;
+  }
+
+  /* At tablet / narrow desktop widths, match the reference formation:
+     the message card is the main wide panel, while the month counter
+     sits below it (never inside the panel). The tree remains behind the
+     composition on the right. */
+  .love-story-stage .corner-box {
+    left: 18px;
+    top: 28px;
+    width: calc(100% - 36px);
+    height: 795px;
+    min-height: 0;
+    padding: clamp(28px, 4vw, 48px);
+  }
+
+  .love-story-stage .message h1 {
+    font-size: clamp(42px, 6.5vw, 68px);
+  }
+
+  .love-story-stage #typedText {
+    font-size: clamp(17px, 2vw, 20px);
+  }
+
+  .love-story-stage #loveCanvas {
+    height: 900px;
+    top: 250px;
+  }
+
+  .love-story-stage .counter {
+    margin-left: 18px;
+    top: 850px;
+    bottom: auto;
+    width: auto;
+    margin: 0;
+  }
+}
+
+/* Phones: single-column flow. The text box gets natural height instead
+   of a forced desktop min-height, while the tree moves below it. */
+@media (max-width: 720px) {
+  main {
+    padding: 10px;
+  }
+
+  .love-card {
+    width: 100%;
+    border-radius: 22px;
+  }
+
+  .memory-carousel {
+    width: calc(100% - 20px);
+    margin: 12px auto 38px;
+  }
+
+  .carousel-window {
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+  }
+
+  .memory-slide {
+    padding: 7px;
+  }
+
+  .memory-slide img {
+    border-radius: 13px;
+  }
+
+  .carousel-arrow {
+    width: 42px;
+    height: 42px;
+    margin-top: -21px;
+    font-size: 30px;
+  }
+
+  .carousel-prev { left: 12px; }
+  .carousel-next { right: 12px; }
+
+  .love-story-stage {
+    min-height: 1190px;
+  }
+
+  .love-story-stage .corner-box {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: calc(100% - 28px);
+    min-height: 0;
+    margin: 0 auto;
+    padding: 24px 22px 28px;
+    border-radius: 24px;
+  }
+
+  .love-story-stage .message {
+    margin-top: 26px;
+  }
+
+  .love-story-stage .message h1 {
+    font-size: clamp(34px, 10vw, 52px);
+    line-height: 1;
+    margin-bottom: 17px;
+    overflow-wrap: anywhere;
+  }
+
+  .love-story-stage #typedText {
+    min-height: 0;
+    font-size: clamp(15px, 4.2vw, 18px);
+    line-height: 1.55;
+  }
+
+  .love-story-stage .languages {
+    font-size: clamp(11px, 3.2vw, 14px);
+    line-height: 1.65;
+  }
+
+  .love-story-stage .signature {
+    font-size: clamp(15px, 4vw, 18px);
+  }
+
+  .love-story-stage #loveCanvas {
+    top: 475px;
+    height: 610px;
+  }
+
+  .love-story-stage .counter {
+    position: absolute;
+    z-index: 10;
+    left: clamp(26px, 3.8vw, 76px);
+    bottom: clamp(22px, 4vh, 48px);
+    font-size: clamp(13px, 1vw, 18px);
+    color: rgba(255, 238, 247, .82);
+  }
+
+  .love-story-stage .counter strong {
+    font-size: 23px;
+  }
+}
+
+/* Very small phones: keep comfortable side margins and readable type. */
+@media (max-width: 420px) {
+  .memory-carousel {
+    width: calc(100% - 14px);
+  }
+
+  .carousel-caption {
+    font-size: 12px;
+  }
+
+  .love-story-stage .corner-box {
+    width: calc(100% - 20px);
+    padding: 22px 18px 25px;
+  }
+
+  .love-story-stage .box-dot {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+  }
+
+  .love-story-stage .message h1 {
+    font-size: clamp(31px, 9.5vw, 43px);
+  }
+
+  .love-story-stage #typedText {
+    font-size: 14px;
+  }
+
+  .love-story-stage #loveCanvas {
+    top: 455px;
+    height: 570px;
+  }
+}
