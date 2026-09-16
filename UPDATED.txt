@@ -1,0 +1,4 @@
+Updated layout:
+- The “Our love story has been going for… 42 months” counter stays outside the pink message box.
+- The outer border now uses equal 20px horizontal margins and 16px vertical margins on desktop, matching the supplied reference composition.
+- The love-story counter is kept aligned with the message box's left edge while remaining below it.
